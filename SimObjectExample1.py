@@ -7,7 +7,6 @@ from SimObject import SimObject
 class SimObjectExample1(SimObject):
     def __init__(self):
         SimObject.__init__(self, 0)
-        self.dt_count = None
 
     def init(self):
         self.data_store.set('counter', 0)
