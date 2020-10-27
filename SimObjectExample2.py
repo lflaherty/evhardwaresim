@@ -2,12 +2,19 @@ import logging
 import datetime
 import time
 
-class SimObjectExample2:
-    def __init__(self, data_store):
-        self.data_store = data_store
+from SimObject import SimObject
 
-    def run(self):
-        while True:
-            now_get = self.data_store.get('now')
-            logging.info('now: {}'.format(now_get))    
-            time.sleep(1)
+class SimObjectExample2(SimObject):
+    def __init__(self):
+        SimObject.__init__(self, 1)
+
+    def init(self):
+        self.data_store.set('counter', 0)
+        self.data_store.set('now', datetime.datetime.now())
+
+    def step(self, dt):
+        now = self.data_store.get('now')
+        counter = self.data_store.get('counter')
+        logging.info('now: {}\tcounter: {}'.format(now, counter))
+
+        self.data_store.set('counter', 0) # Reset
