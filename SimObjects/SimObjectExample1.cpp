@@ -17,7 +17,7 @@ void SimObjectExample1::init()
     getDataStore().put("counter", counter);
 }
 
-void SimObjectExample1::step(unsigned long dt)
+void SimObjectExample1::step(unsigned long)
 {
     DataStore& ds = getDataStore();
 
