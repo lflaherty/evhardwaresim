@@ -4,9 +4,39 @@
 #include <memory>
 #include <pthread.h>
 #include "DataStore.h"
+#include <sys/mman.h>    // for mlockall
 
 #include "SimObjectExample1.h"
 #include "SimObjectExample2.h"
+
+/**
+ * Setup for Real-Time operation.
+ * Locks memory and sets RR scheduling
+ */
+void setupRT()
+{
+	// Lock memory to ensure no swapping is done.
+	if(mlockall(MCL_FUTURE|MCL_CURRENT))
+	{
+		fprintf(stderr,"WARNING: Failed to lock memory (try running as superuser?)\n");
+	}
+	else
+	{
+		printf("Successfully locked memory\n");
+	}
+
+	// Set our thread to real time priority
+	struct sched_param sp;
+	sp.sched_priority = 30;
+	if(pthread_setschedparam(pthread_self(), SCHED_RR, &sp))
+	{
+		fprintf(stderr,"WARNING: Failed to thread to real-time priority (try running as superuser?)\n");
+	}
+	else
+	{
+		printf("Successfully set thread to real-time priority\n");
+	}
+}
 
 int main()
 {
@@ -23,6 +53,16 @@ int main()
 
 
     // Start
+    setupRT();
+        
+    // setup params
+    struct sched_param param;
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+    pthread_attr_setschedpolicy(&attr, SCHED_RR);
+    param.sched_priority = 0;
+    pthread_attr_setschedparam(&attr, &param);
+
     vector<shared_ptr<pthread_t>> threads;
     for (shared_ptr<SimObject> obj : objects)
     {
@@ -31,7 +71,7 @@ int main()
 
         // create
         shared_ptr<pthread_t> thd = make_shared<pthread_t>();
-        pthread_create(thd.get(), NULL, obj->run, obj.get());
+        pthread_create(thd.get(), &attr, obj->run, obj.get());
         threads.push_back(thd);
     }
 
