@@ -63,15 +63,12 @@ void CANInterface::step(unsigned long)
     // Nothing to be done here for this sim device
 }
 
-std::vector<CAN_Callback> CANInterface::getCallbacks(uint32_t canMsgId)
+void CANInterface::addCallback(CAN_Callback callbackMethod, void* obj)
 {
-    std::map<uint32_t, std::vector<CAN_Callback>>::iterator it;
-    if (it == m_callbacks.end()) {
-        // just return an empty list
-        return std::vector<CAN_Callback>();
-    } else {
-        return m_callbacks[canMsgId];
-    }
+    CAN_Callback_Store store;
+    store.method = callbackMethod;
+    store.caller = obj;
+    m_callbacks.push_back(store);
 }
 
 void* CANInterface::canThread(void* canInterface)
@@ -102,10 +99,9 @@ void* CANInterface::canThread(void* canInterface)
 
                 // Get the appropriate callbacks
                 uint32_t canId = receiveMsg.can_id;
-                std::vector<CAN_Callback> callbacks = can->getCallbacks(canId);
-                for (CAN_Callback callback : callbacks) {
+                for (CAN_Callback_Store callback : can->m_callbacks) {
                     // call them all
-                    callback(canId, receiveMsg.data, receiveMsg.can_dlc);
+                    callback.method(callback.caller, canId, receiveMsg.data, receiveMsg.can_dlc);
                 }
             }
         }

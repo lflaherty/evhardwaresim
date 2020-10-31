@@ -17,9 +17,13 @@ void declareSimObjects(
     using namespace std;
 
     // Create all of the sim objects here and append to the simObjects vector
-    simObjects.push_back(make_shared<SimObjectExample1>(dataStore));
-    simObjects.push_back(make_shared<PrintTask>(dataStore));
-    simObjects.push_back(make_shared<CANInterface>(dataStore));
+    shared_ptr<SimObjectExample1> example(new SimObjectExample1(dataStore));
+    shared_ptr<CANInterface> canInterface(new CANInterface(dataStore));
+    shared_ptr<PrintTask> printTask(new PrintTask(dataStore, canInterface));
+
+    simObjects.push_back(example);
+    simObjects.push_back(canInterface);
+    simObjects.push_back(printTask);
 }
 
 /**
@@ -37,7 +41,7 @@ void setupRT()
 
 	// Set our thread to real time priority
 	struct sched_param sp;
-	sp.sched_priority = 30;
+	sp.sched_priority = 1;
 	if(pthread_setschedparam(pthread_self(), SCHED_RR, &sp)) {
 		fprintf(stderr,"WARNING: Failed to thread to real-time priority (try running as superuser?)\n");
 	} else {

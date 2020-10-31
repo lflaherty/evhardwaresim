@@ -6,23 +6,32 @@
 #include <stdint.h>
 #include <map>
 #include <vector>
+#include <functional>
 
-typedef void (*CAN_Callback)(uint32_t, uint8_t*, size_t);
+/**
+ * Parameters:
+ *      Calling object
+ *      Msg ID
+ *      Data payload
+ *      Length of data payload (up to 8)
+ */
+typedef void (*CAN_Callback)(void*, uint32_t, uint8_t[8], size_t);
 
 class CANInterface : public SimObject
 {
 private:
+    struct CAN_Callback_Store {
+        CAN_Callback method;
+        void* caller;
+    };
     /**
      * Callback methods
-     * Maps Msg ID -> methods to call
      */
-    std::map<uint32_t, std::vector<CAN_Callback>> m_callbacks;
+    std::vector<CAN_Callback_Store> m_callbacks;
 
     int m_socket;
 
     static void* canThread(void* canInterface);
-
-    std::vector<CAN_Callback> getCallbacks(uint32_t canMsgId);
 
 public:
     CANInterface(DataStore& dataStore);
@@ -31,7 +40,7 @@ public:
 
     virtual void step(unsigned long dt);
 
-    void addCallback(uint32_t msgId, CAN_Callback callbackMethod);
+    void addCallback(CAN_Callback callbackMethod, void* obj);
 };
 
 #endif

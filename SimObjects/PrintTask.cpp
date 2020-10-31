@@ -3,10 +3,11 @@
 #include <iostream>
 #include <any>
 
-PrintTask::PrintTask(DataStore& dataStore)
+PrintTask::PrintTask(DataStore& dataStore, std::shared_ptr<CANInterface> canInterface)
     : SimObject(dataStore, "PrintTask", 1)  // 1Hz
 {
-
+    // Register a callback
+    canInterface->addCallback(canCallback, (void*)this);
 }
 
 void PrintTask::init()
@@ -35,4 +36,23 @@ void PrintTask::step(unsigned long dt)
     counter = 0;
     ds.put("counter", counter);
 
+}
+
+void PrintTask::canCallback(void* obj, uint32_t msgId, uint8_t data[8], size_t len)
+{
+    using namespace std;
+
+    cout << hex;
+    cout << msgId << "\t";
+
+    cout << dec;
+    cout << "[" << len << "] ";
+
+    cout << hex;
+    for (size_t i = 0; i < len; ++i) {
+        cout << " " << (unsigned int)data[i];
+    }
+    cout << endl;
+
+    cout << dec;
 }
