@@ -7,7 +7,7 @@
 #include <sys/mman.h>    // for mlockall
 
 #include "SimObjectExample1.h"
-#include "SimObjectExample2.h"
+#include "PrintTask.h"
 
 void declareSimObjects(
         DataStore& dataStore, 
@@ -17,7 +17,7 @@ void declareSimObjects(
 
     // Create all of the sim objects here and append to the simObjects vector
     simObjects.push_back(make_shared<SimObjectExample1>(dataStore));
-    simObjects.push_back(make_shared<SimObjectExample2>(dataStore));
+    simObjects.push_back(make_shared<PrintTask>(dataStore));
 }
 
 /**

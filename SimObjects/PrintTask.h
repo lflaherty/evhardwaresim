@@ -1,13 +1,13 @@
-#ifndef SIMOBJECTEXAMPLE2_H
-#define SIMOBJECTEXAMPLE2_H
+#ifndef PrintTask_H
+#define PrintTask_H
 
 #include "DataStore.h"
 #include "SimObject.h"
 
-class SimObjectExample2 : public SimObject
+class PrintTask : public SimObject
 {
 public:
-    SimObjectExample2(DataStore& dataStore);
+    PrintTask(DataStore& dataStore);
 
     virtual void init();
 

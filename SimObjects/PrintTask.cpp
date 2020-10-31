@@ -1,15 +1,15 @@
-#include "SimObjectExample2.h"
+#include "PrintTask.h"
 
 #include <iostream>
 #include <any>
 
-SimObjectExample2::SimObjectExample2(DataStore& dataStore)
-    : SimObject(dataStore, "Example2", 1)  // 1Hz
+PrintTask::PrintTask(DataStore& dataStore)
+    : SimObject(dataStore, "PrintTask", 1)  // 1Hz
 {
 
 }
 
-void SimObjectExample2::init()
+void PrintTask::init()
 {
     std::cout << "[" << getName() << "] init" << std::endl;
 
@@ -17,15 +17,19 @@ void SimObjectExample2::init()
     getDataStore().put("counter", counter);
 }
 
-void SimObjectExample2::step(unsigned long dt)
+void PrintTask::step(unsigned long dt)
 {
+    using namespace std;
+
     DataStore& ds = getDataStore();
     unsigned long counter = ds.get<unsigned long>("counter");
 
     double delay = 1e-9*dt;
     double hz = 1/delay;
-    std::cout << "[" << getName() << "] tick " << delay << "s (" << hz << "Hz)\t";
-    std::cout << "counter: " << counter << std::endl;
+
+    cout << "[" << getName() << "] status output - " << delay << "s (" << hz << "Hz)\t" << endl;;
+    cout << "\tcounter\t" << counter << endl;
+    cout << endl;
 
 
     counter = 0;

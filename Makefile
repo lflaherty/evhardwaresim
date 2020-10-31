@@ -8,8 +8,8 @@ INCLUDES=-IBase -ISimObjects
 CFILES=main.cpp \
 	Base/DataStore.cpp \
 	Base/SimObject.cpp \
+	SimObjects/PrintTask.cpp \
 	SimObjects/SimObjectExample1.cpp \
-	SimObjects/SimObjectExample2.cpp
 
 OBJS=$(CFILES:.cpp=.o)
 
