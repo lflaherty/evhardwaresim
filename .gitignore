@@ -13,6 +13,15 @@ dist/
 # Compiled Python bytecode
 *.py[cod]
 
+# Compiled C/C++ files
+*.o
+
+# Binary file
+sim.out
+
+# VS Code config data
+.vscode
+
 # Log files
 *.log
 
