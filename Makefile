@@ -5,7 +5,7 @@ LIBS=
 
 INCLUDES=-IBase -ISimObjects
 
-CFILES=sim.cpp \
+CFILES=main.cpp \
 	Base/DataStore.cpp \
 	Base/SimObject.cpp \
 	SimObjects/SimObjectExample1.cpp \
