@@ -11,6 +11,7 @@ CFILES=main.cpp \
 	Base/SimObject.cpp \
 	SimObjects/PrintTask.cpp \
 	SimObjects/SimObjectExample1.cpp \
+	SimObjects/CANInterface.cpp \
 
 OBJS=$(CFILES:.cpp=.o)
 

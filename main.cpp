@@ -8,6 +8,7 @@
 
 #include "SimObjectExample1.h"
 #include "PrintTask.h"
+#include "CANInterface.h"
 
 void declareSimObjects(
         DataStore& dataStore, 
@@ -18,6 +19,7 @@ void declareSimObjects(
     // Create all of the sim objects here and append to the simObjects vector
     simObjects.push_back(make_shared<SimObjectExample1>(dataStore));
     simObjects.push_back(make_shared<PrintTask>(dataStore));
+    simObjects.push_back(make_shared<CANInterface>(dataStore));
 }
 
 /**
