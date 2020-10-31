@@ -3,14 +3,13 @@ CFLAGS=-Wall -Wextra -std=c++17 -O2
 LFLAGS=-lpthread -lm
 LIBS=
 
-# Mostly just adds the include paths for simluink
-INCLUDES=
+INCLUDES=-IBase -ISimObjects
 
 CFILES=sim.cpp \
-	DataStore.cpp \
-	SimObject.cpp \
-	SimObjectExample1.cpp \
-	SimObjectExample2.cpp
+	Base/DataStore.cpp \
+	Base/SimObject.cpp \
+	SimObjects/SimObjectExample1.cpp \
+	SimObjects/SimObjectExample2.cpp
 
 OBJS=$(CFILES:.cpp=.o)
 
