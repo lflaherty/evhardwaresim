@@ -18,8 +18,8 @@ int main()
     // Delcare sim objects
     vector<shared_ptr<SimObject>> objects;
 
-    objects.push_back(make_unique<SimObjectExample1>(dataStore));
-    objects.push_back(make_unique<SimObjectExample2>(dataStore));
+    objects.push_back(make_shared<SimObjectExample1>(dataStore));
+    objects.push_back(make_shared<SimObjectExample2>(dataStore));
 
 
     // Start
@@ -30,7 +30,7 @@ int main()
         obj->init();
 
         // create
-        shared_ptr<pthread_t> thd = make_unique<pthread_t>();
+        shared_ptr<pthread_t> thd = make_shared<pthread_t>();
         pthread_create(thd.get(), NULL, obj->run, obj.get());
         threads.push_back(thd);
     }
