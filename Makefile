@@ -1,4 +1,5 @@
-CC=g++
+# CC=g++						# Use this for compiling for PC
+CC=arm-linux-gnueabihf-g++      # Use this for compiling for test device
 CFLAGS=-Wall -Wextra -std=c++17 -O2
 LFLAGS=-lpthread -lm
 LIBS=
