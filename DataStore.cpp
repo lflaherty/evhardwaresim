@@ -16,6 +16,7 @@ DataStore::~DataStore()
 
 void DataStore::put(std::string name, std::any obj)
 {
+    // TODO lockin on a per-variable basis - this currently locks all variable names
     pthread_mutex_lock(&m_lock);
     m_data[name] = obj;
     pthread_mutex_unlock(&m_lock);
