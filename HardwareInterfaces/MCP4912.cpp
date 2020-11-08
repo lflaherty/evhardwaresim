@@ -59,7 +59,7 @@ void MCP4912::write(
     tx[0] |= (shutdownCtrl & 0x1) << 6;
 
     tx[0] |= (value & 0x3FF) >> 6;
-    tx[1] |= (value & 0x3FF) >> 2;
+    tx[1] |= (value & 0x3FF) << 2;
 
     // Perform data transfer
     m_spi->transfer(rx, tx, 2, channel.csPin);
