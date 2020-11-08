@@ -24,7 +24,7 @@ CANInterface::CANInterface(DataStore& dataStore)
 	const char *ifname = "can0";
 
 	if((m_socket = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-		perror("ERROR: driverl/can: Error while opening socket");
+		perror("[CAN Interface] Error while opening socket");
 	}
 
 	strcpy(ifr.ifr_name, ifname);
@@ -37,7 +37,7 @@ CANInterface::CANInterface(DataStore& dataStore)
     std::cout << ifname << " at index " << ifr.ifr_ifindex << std::endl;
 
 	if(bind(m_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-		perror("ERROR: driverl/can: Error in socket bind");
+		perror("[CAN Interface] Error in socket bind");
 	}
 	
 	// Set up CAN socket threads
