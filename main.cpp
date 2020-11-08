@@ -37,7 +37,7 @@ void declareSimObjects(
     shared_ptr<MCP4912> mcp4912(new MCP4912(dataStore, gpioInterface, spiInterface));
 
     // Sim Objects
-    shared_ptr<SimObjectExample1> example(new SimObjectExample1(dataStore));
+    shared_ptr<SimObjectExample1> example(new SimObjectExample1(dataStore, mcp4912));
     shared_ptr<PrintTask> printTask(new PrintTask(dataStore, canInterface));
 
     simObjects.push_back(example);
