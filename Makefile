@@ -14,6 +14,7 @@ CFILES=main.cpp \
 	HardwareInterfaces/CANInterface.cpp \
 	HardwareInterfaces/GPIOInterface.cpp \
 	HardwareInterfaces/SPIInterface.cpp \
+	HardwareInterfaces/MCP4912.cpp \
 
 OBJS=$(CFILES:.cpp=.o)
 

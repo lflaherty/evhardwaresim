@@ -6,11 +6,14 @@
 #include "DataStore.h"
 #include <sys/mman.h>    // for mlockall
 
-#include "SimObjectExample1.h"
-#include "PrintTask.h"
 #include "CANInterface.h"
 #include "GPIOInterface.h"
 #include "SPIInterface.h"
+
+#include "MCP4912.h"
+
+#include "SimObjectExample1.h"
+#include "PrintTask.h"
 
 void declareSimObjects(
         DataStore& dataStore, 
@@ -31,6 +34,8 @@ void declareSimObjects(
     spiConfig.speed = 1600000;
     shared_ptr<SPIInterface> spiInterface(new SPIInterface(dataStore, gpioInterface, spiConfig));
 
+    shared_ptr<MCP4912> mcp4912(new MCP4912(dataStore, gpioInterface, spiInterface));
+
     // Sim Objects
     shared_ptr<SimObjectExample1> example(new SimObjectExample1(dataStore));
     shared_ptr<PrintTask> printTask(new PrintTask(dataStore, canInterface));
@@ -39,6 +44,7 @@ void declareSimObjects(
     simObjects.push_back(canInterface);
     simObjects.push_back(gpioInterface);
     simObjects.push_back(spiInterface);
+    simObjects.push_back(mcp4912);
     simObjects.push_back(printTask);
 }
 
