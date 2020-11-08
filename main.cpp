@@ -10,6 +10,7 @@
 #include "PrintTask.h"
 #include "CANInterface.h"
 #include "GPIOInterface.h"
+#include "SPIInterface.h"
 
 void declareSimObjects(
         DataStore& dataStore, 
@@ -22,6 +23,14 @@ void declareSimObjects(
     shared_ptr<CANInterface> canInterface(new CANInterface(dataStore));
     shared_ptr<GPIOInterface> gpioInterface(new GPIOInterface(dataStore));
 
+    SPIInterface::SPIConfig spiConfig;
+    spiConfig.device = "/dev/spidev1.0";
+    spiConfig.mode = 0;
+    spiConfig.bits = 8;
+    spiConfig.firstBit = 0; // MSB first
+    spiConfig.speed = 1600000;
+    shared_ptr<SPIInterface> spiInterface(new SPIInterface(dataStore, gpioInterface, spiConfig));
+
     // Sim Objects
     shared_ptr<SimObjectExample1> example(new SimObjectExample1(dataStore));
     shared_ptr<PrintTask> printTask(new PrintTask(dataStore, canInterface));
@@ -29,6 +38,7 @@ void declareSimObjects(
     simObjects.push_back(example);
     simObjects.push_back(canInterface);
     simObjects.push_back(gpioInterface);
+    simObjects.push_back(spiInterface);
     simObjects.push_back(printTask);
 }
 
