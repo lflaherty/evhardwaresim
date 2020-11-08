@@ -45,8 +45,8 @@ public:
      * Definition of MCP4912 device to access
      */
     struct OutputChannel {
-        GPIOInterface::Pin* csPin;  // CS pin applied to MCP4912 device
-        uint8_t channel;   // 0 for 
+        const GPIOInterface::Pin* csPin;  // CS pin applied to MCP4912 device
+        const uint8_t channel;   // 0 for 
     };
 
     /**
