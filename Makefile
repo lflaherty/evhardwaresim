@@ -4,14 +4,14 @@ CFLAGS=-Wall -Wextra -std=c++17 -O2
 LFLAGS=-lpthread -lm
 LIBS=
 
-INCLUDES=-IBase -ISimObjects
+INCLUDES=-IBase -ISimObjects -IHardwareInterfaces
 
 CFILES=main.cpp \
 	Base/DataStore.cpp \
 	Base/SimObject.cpp \
 	SimObjects/PrintTask.cpp \
 	SimObjects/SimObjectExample1.cpp \
-	SimObjects/CANInterface.cpp \
+	HardwareInterfaces/CANInterface.cpp \
 
 OBJS=$(CFILES:.cpp=.o)
 
