@@ -12,6 +12,7 @@ CFILES=main.cpp \
 	SimObjects/PrintTask.cpp \
 	SimObjects/SimObjectExample1.cpp \
 	HardwareInterfaces/CANInterface.cpp \
+	HardwareInterfaces/GPIOInterface.cpp \
 
 OBJS=$(CFILES:.cpp=.o)
 

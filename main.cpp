@@ -9,6 +9,7 @@
 #include "SimObjectExample1.h"
 #include "PrintTask.h"
 #include "CANInterface.h"
+#include "GPIOInterface.h"
 
 void declareSimObjects(
         DataStore& dataStore, 
@@ -17,12 +18,17 @@ void declareSimObjects(
     using namespace std;
 
     // Create all of the sim objects here and append to the simObjects vector
-    shared_ptr<SimObjectExample1> example(new SimObjectExample1(dataStore));
+    // Hardware Interfaces
     shared_ptr<CANInterface> canInterface(new CANInterface(dataStore));
+    shared_ptr<GPIOInterface> gpioInterface(new GPIOInterface(dataStore));
+
+    // Sim Objects
+    shared_ptr<SimObjectExample1> example(new SimObjectExample1(dataStore));
     shared_ptr<PrintTask> printTask(new PrintTask(dataStore, canInterface));
 
     simObjects.push_back(example);
     simObjects.push_back(canInterface);
+    simObjects.push_back(gpioInterface);
     simObjects.push_back(printTask);
 }
 
