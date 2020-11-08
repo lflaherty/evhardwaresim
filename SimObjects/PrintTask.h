@@ -12,6 +12,12 @@ class PrintTask : public SimObject
 {
 private:
     static void canCallback(void* obj, uint32_t msgId, uint8_t* data, size_t);
+
+    /**
+     * Used to access DAC
+     */
+    std::shared_ptr<CANInterface> m_can;
+
 public:
     PrintTask(DataStore& dataStore, std::shared_ptr<CANInterface> canInterface);
 

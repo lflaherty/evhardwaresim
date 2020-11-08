@@ -4,7 +4,8 @@
 #include <any>
 
 PrintTask::PrintTask(DataStore& dataStore, std::shared_ptr<CANInterface> canInterface)
-    : SimObject(dataStore, "PrintTask", 1)  // 1Hz
+    : SimObject(dataStore, "PrintTask", 1),  // 1Hz
+      m_can(canInterface)
 {
     // Register a callback
     canInterface->addCallback(canCallback, (void*)this);
@@ -36,6 +37,13 @@ void PrintTask::step(unsigned long dt)
     counter = 0;
     ds.put("counter", counter);
 
+    // also send count on CAN bus
+    uint8_t canData[8] = {0};
+    canData[0] = (counter >> 24) & 0xFF;
+    canData[1] = (counter >> 16) & 0xFF;
+    canData[2] = (counter >> 8) & 0xFF;
+    canData[3] = (counter) & 0xFF;
+    m_can->send(0x3A1, 8, canData);
 }
 
 void PrintTask::canCallback(void* obj, uint32_t msgId, uint8_t data[8], size_t len)

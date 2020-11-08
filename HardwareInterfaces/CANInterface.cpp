@@ -14,9 +14,9 @@
 #include "linux/can/raw.h"
 
 CANInterface::CANInterface(DataStore& dataStore)
-    : SimObject(dataStore, "CAN Interface", 1)  // 1Hz
+    : SimObject(dataStore, "CAN Interface", 1),  // 1Hz
+      m_errorPrinted(false)
 {
-
 	// Set up CAN driver
 	struct sockaddr_can addr;
 	struct ifreq ifr;
@@ -69,6 +69,24 @@ void CANInterface::addCallback(CAN_Callback callbackMethod, void* obj)
     store.method = callbackMethod;
     store.caller = obj;
     m_callbacks.push_back(store);
+}
+
+void CANInterface::send(const uint16_t canId, uint8_t len, const uint8_t* data)
+{
+    struct can_frame frame;
+    frame.can_id = canId;
+    frame.can_dlc = len;
+
+    // copy data to can_frame
+    memcpy(frame.data, data, len);
+
+    int retval = write(m_socket, &frame, sizeof(frame));
+    if (retval < 0 && !m_errorPrinted)
+    {
+        perror("[CAN Interface] Error sending CAN message");
+        m_errorPrinted = true;
+    }
+
 }
 
 void* CANInterface::canThread(void* canInterface)
