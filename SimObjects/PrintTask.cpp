@@ -1,7 +1,9 @@
 #include "PrintTask.h"
 
 #include <iostream>
+#include <iomanip>
 #include <any>
+#include <cstring>
 
 PrintTask::PrintTask(DataStore& dataStore, std::shared_ptr<CANInterface> canInterface)
     : SimObject(dataStore, "PrintTask", 1),  // 1Hz
@@ -33,9 +35,32 @@ void PrintTask::step(unsigned long dt)
     double delay = 1e-9*dt;
     double hz = 1/delay;
 
+    // Print output
     cout << "[" << getName() << "] status output - " << delay << "s (" << hz << "Hz)\t" << endl;;
     cout << "\tcounter\t" << counter << endl;
+    cout << "\tReceived CAN messages:" << endl;
+
+    std::vector<CANFrame>::iterator it;
+    for (it = m_receivedMsgs.begin(); it != m_receivedMsgs.end(); ++it) {
+        cout << "\t\t";
+        cout << hex << uppercase;
+        cout << it->msgId << "\t";
+
+        cout << dec;
+        cout << "[" << it->len << "]" << " ";
+
+        cout << hex << uppercase;
+        for (size_t i = 0; i < it->len; ++i) {
+            cout << " ";
+            cout << setfill('0') << setw(2) << (unsigned int)it->data[i];
+        }
+
+        cout << endl;
+    }
+    cout << dec;
     cout << endl;
+
+    m_receivedMsgs.clear();
 
 
     counter = 0;
@@ -52,19 +77,12 @@ void PrintTask::step(unsigned long dt)
 
 void PrintTask::canCallback(void* obj, uint32_t msgId, uint8_t data[8], size_t len)
 {
-    using namespace std;
+    CANFrame frame;
+    frame.msgId = msgId;
+    frame.len = len;
 
-    cout << hex;
-    cout << msgId << "\t";
+    std::memcpy(frame.data, data, len);
 
-    cout << dec;
-    cout << "[" << len << "] ";
-
-    cout << hex;
-    for (size_t i = 0; i < len; ++i) {
-        cout << " " << (unsigned int)data[i];
-    }
-    cout << endl;
-
-    cout << dec;
+    PrintTask* printTask = (PrintTask*)obj;
+    printTask->m_receivedMsgs.push_back(frame);
 }
