@@ -39,7 +39,15 @@ void MCP4912::initChannel(const OutputChannel& channel)
 {
     // Allow output on pin and set to 0
     m_gpio->initPin(channel.csPin, GPIOInterface::GPIO_OUT);
-    m_gpio->writePin(channel.csPin, 0); // Mode 0 => !CS=1 for not selected
+    m_gpio->writePin(channel.csPin, 1); // Mode 0 => !CS=1 for not selected
+
+    // set LDAC
+    m_gpio->initPin(channel.ldacPin, GPIOInterface::GPIO_OUT);
+    m_gpio->writePin(channel.ldacPin, 1); // Update Vout on rising CS
+
+    // set SHDN
+    m_gpio->initPin(channel.shdnPin, GPIOInterface::GPIO_OUT);
+    m_gpio->writePin(channel.shdnPin, 1); // Allow output
 }
 
 void MCP4912::write(

@@ -36,8 +36,8 @@ public:
     static const uint8_t CHANNEL_B;  // Use Channel B
     static const uint8_t BUFFERED;   // VREF input buffered
     static const uint8_t UNBUFFERED; // VREF input unbuffered
-    static const uint8_t GAIN_1;     // output = 1 * ( VREF*D/4096 )
-    static const uint8_t GAIN_2;     // output = 2 * ( VREF*D/4096 )
+    static const uint8_t GAIN_1;     // output = 1 * ( VREF*D/1024 )
+    static const uint8_t GAIN_2;     // output = 2 * ( VREF*D/1024 )
     static const uint8_t ACTIVE;     // Active mode operation. Vout available.
     static const uint8_t SHDN;       // Shutdown selected channel.
 
@@ -46,6 +46,8 @@ public:
      */
     struct OutputChannel {
         const GPIOInterface::Pin* csPin;  // CS pin applied to MCP4912 device
+        const GPIOInterface::Pin* shdnPin;  // !SHDN pin
+        const GPIOInterface::Pin* ldacPin;  // !LDAC pin
         const uint8_t channel;   // 0 for 
     };
 
@@ -57,7 +59,7 @@ public:
 
     /**
      * @brief Updates the write command register on the MCP4912.
-     * @param value Value to write. Max 4096. Vout = GAIN * VREF*D/4096 
+     * @param value Value to write. Max 1024. Vout = GAIN * VREF*D/1024 
      * @param channel Device and channel to write to
      * @param bufferControl Enable or diable buffer
      * @param outputGain Set output gain
