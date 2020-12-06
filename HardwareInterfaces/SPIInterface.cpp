@@ -15,6 +15,8 @@ SPIInterface::SPIInterface(
       m_gpio(gpioInterface),
       m_errorPrinted(false)
 {
+    std::cout << "[SPI Interface] Beginning device init" << std::endl;
+
     int ret = 0;
 
     // Open SPI device

@@ -7,8 +7,12 @@ PrintTask::PrintTask(DataStore& dataStore, std::shared_ptr<CANInterface> canInte
     : SimObject(dataStore, "PrintTask", 1),  // 1Hz
       m_can(canInterface)
 {
+    std::cout << "[PrintTask] Initializing" << std::endl;
+
     // Register a callback
     canInterface->addCallback(canCallback, (void*)this);
+
+    std::cout << "[PrintTask] Initialized" << std::endl;
 }
 
 void PrintTask::init()

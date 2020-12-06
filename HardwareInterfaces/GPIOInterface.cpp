@@ -114,6 +114,8 @@ const GPIOInterface::Pin GPIOInterface::P9_42 = { "GPIO0_7",     GPIO0,      7, 
 GPIOInterface::GPIOInterface(DataStore& dataStore)
     : SimObject(dataStore, "GPIO Interface", 1)  // 1Hz
 {
+    std::cout << "[GPIO Interface] Beginning device init" << std::endl;
+
     int fd = open("/dev/mem", O_RDWR);
     if (fd == -1) {
         std::cerr << "[GPIO Interface] Unable to open /dev/mem" << std::endl;
@@ -132,6 +134,8 @@ GPIOInterface::GPIOInterface(DataStore& dataStore)
         std::cerr << "[GPIO Interface] Unable to create mutex" << std::endl;
         return;
     }
+
+    std::cout << "[GPIO Interface] Completed device init" << std::endl;
 }
 
 void GPIOInterface::init()
@@ -147,6 +151,8 @@ void GPIOInterface::step(unsigned long)
 
 void GPIOInterface::initPin(const Pin* pin, Direction direction)
 {
+    std::cout << "[GPIO Interface] Configuring pin" << std::endl;
+
     int pin_data = 0;
 	FILE *fp = NULL;
 	char muxfile[64];
@@ -176,6 +182,8 @@ void GPIOInterface::initPin(const Pin* pin, Direction direction)
 	}
 	fprintf(fp, "%x", pin_data);
 	fclose(fp);
+
+    std::cout << "[GPIO Interface] Completed configuring pin" << std::endl;
 }
 
 void GPIOInterface::write(const Pin* pin, bool value)

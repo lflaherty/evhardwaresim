@@ -30,6 +30,8 @@ SimObjectExample1::SimObjectExample1(
     : SimObject(dataStore, "Example1", 100),  // 100Hz
       m_mcp4912(dac)
 {
+    std::cout << "[SimObjectExample1] Initializing" << std::endl;
+
     // initialize device and start with known DAC values
     m_mcp4912->initChannel(ChannelA);
     m_mcp4912->initChannel(ChannelB);
@@ -40,6 +42,7 @@ SimObjectExample1::SimObjectExample1(
     m_mcp4912->write(0, ChannelB, MCP4912::BUFFERED, MCP4912::GAIN_1, MCP4912::ACTIVE);
     m_mcp4912->write(0, ChannelC, MCP4912::BUFFERED, MCP4912::GAIN_1, MCP4912::ACTIVE);
     m_mcp4912->write(0, ChannelD, MCP4912::BUFFERED, MCP4912::GAIN_1, MCP4912::ACTIVE);
+    std::cout << "[SimObjectExample1] Initialized" << std::endl;
 }
 
 void SimObjectExample1::init()
