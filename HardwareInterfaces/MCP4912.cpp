@@ -39,7 +39,7 @@ void MCP4912::initChannel(const OutputChannel& channel)
 {
     // Allow output on pin and set to 0
     m_gpio->initPin(channel.csPin, GPIOInterface::GPIO_OUT);
-    m_gpio->write(channel.csPin, 0); // Mode 0 => !CS=1 for not selected
+    m_gpio->writePin(channel.csPin, 0); // Mode 0 => !CS=1 for not selected
 }
 
 void MCP4912::write(

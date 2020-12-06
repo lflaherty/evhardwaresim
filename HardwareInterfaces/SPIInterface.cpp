@@ -116,11 +116,11 @@ void SPIInterface::transfer(
     };
 
     // SPI MODE 0 CS toggling
-    m_gpio->write(cs, false);
+    m_gpio->writePin(cs, false);
 
     ret = ioctl(m_fd, SPI_IOC_MESSAGE(1), &tr);
 
-    m_gpio->write(cs, true);
+    m_gpio->writePin(cs, true);
 
     if (ret == -1 && !m_errorPrinted) {
         perror("[SPI Interface] Can't send spi message");
