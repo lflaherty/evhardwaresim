@@ -15,10 +15,10 @@
 /* ***** Define GPIO Pins ***** */
 const GPIOInterface::Pin GPIOInterface::P9_23 = { .gpio = 49 };
 const GPIOInterface::Pin GPIOInterface::P9_25 = { .gpio = 117 };
-const GPIOInterface::Pin GPIOInterface::P9_27 = { .gpio = 125 };
-const GPIOInterface::Pin GPIOInterface::P9_28 = { .gpio = 123 };
-const GPIOInterface::Pin GPIOInterface::P9_29 = { .gpio = 121 };
-const GPIOInterface::Pin GPIOInterface::P9_30 = { .gpio = 122 };
+const GPIOInterface::Pin GPIOInterface::P9_27 = { .gpio = 115 };
+const GPIOInterface::Pin GPIOInterface::P9_28 = { .gpio = 113 };
+const GPIOInterface::Pin GPIOInterface::P9_29 = { .gpio = 111 };
+const GPIOInterface::Pin GPIOInterface::P9_30 = { .gpio = 112 };
 
 
 GPIOInterface::GPIOInterface(DataStore& dataStore)

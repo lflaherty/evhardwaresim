@@ -43,7 +43,7 @@ void MCP4912::initChannel(const OutputChannel& channel)
 
     // set LDAC
     m_gpio->initPin(channel.ldacPin, GPIOInterface::GPIO_OUT);
-    m_gpio->writePin(channel.ldacPin, 1); // Update Vout on rising CS
+    m_gpio->writePin(channel.ldacPin, 0); // Update Vout on rising CS
 
     // set SHDN
     m_gpio->initPin(channel.shdnPin, GPIOInterface::GPIO_OUT);
@@ -60,11 +60,16 @@ void MCP4912::write(
     uint8_t tx[2] = {0};
     uint8_t rx[2] = {0};  // Unused, but a buffer is needed
 
+    // Clamp values above 1023 to 1023
+    if (value > 1023) {
+        value = 1023;
+    }
+
     // Encode data
     tx[0] |= (channel.channel & 0x1) << 7;
     tx[0] |= (bufferControl & 0x1) << 6;
-    tx[0] |= (outputGain & 0x1) << 6;
-    tx[0] |= (shutdownCtrl & 0x1) << 6;
+    tx[0] |= (outputGain & 0x1) << 5;
+    tx[0] |= (shutdownCtrl & 0x1) << 4;
 
     tx[0] |= (value & 0x3FF) >> 6;
     tx[1] |= (value & 0x3FF) << 2;
