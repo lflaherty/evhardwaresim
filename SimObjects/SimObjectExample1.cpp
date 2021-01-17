@@ -71,7 +71,8 @@ void SimObjectExample1::step(unsigned long)
     ds.put("counter", counter);
 
     // also write to one of the DACs
-    uint16_t dacOutput = counter % 1024;
+    // uint16_t dacOutput = counter % 1024;
+    uint16_t dacOutput = 1024;
     m_mcp4912->write(dacOutput, ChannelA, MCP4912::BUFFERED, MCP4912::GAIN_1, MCP4912::ACTIVE);
 
 }
