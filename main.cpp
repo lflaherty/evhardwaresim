@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include "DataStore.h"
 #include <sys/mman.h>    // for mlockall
+#include <unistd.h> 
 
 #include "CANInterface.h"
 #include "GPIOInterface.h"
@@ -14,6 +15,9 @@
 
 #include "SimObjectExample1.h"
 #include "PrintTask.h"
+
+// Startup options
+static bool g_clearOnPeriodicPrint = false;
 
 void declareSimObjects(
         DataStore& dataStore, 
@@ -39,6 +43,7 @@ void declareSimObjects(
     // Sim Objects
     shared_ptr<SimObjectExample1> example(new SimObjectExample1(dataStore, mcp4912));
     shared_ptr<PrintTask> printTask(new PrintTask(dataStore, canInterface));
+    printTask->setClearOnPeriodicPrint(g_clearOnPeriodicPrint);
 
     simObjects.push_back(example);
     simObjects.push_back(canInterface);
@@ -71,9 +76,26 @@ void setupRT()
 	}
 }
 
-int main()
+int main(int argc, char* argv[])
 {
     using namespace std;
+
+    // Get args
+    int opt;
+    while ((opt = getopt(argc, argv, "c")) != -1) {
+        switch (opt)
+        {
+        case 'c':
+            g_clearOnPeriodicPrint = true;
+            break;
+        case 'h':
+        default:
+            cerr << "Usage: " << argv[0] << " [-c]" << endl;
+            cerr << "Parameters:" << endl;
+            cerr << "\t-c\tClear screen on each refresh" << endl;
+            return 1;
+        }
+    }
 
     // Delcare data store
     DataStore dataStore;

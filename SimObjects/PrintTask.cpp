@@ -7,7 +7,8 @@
 
 PrintTask::PrintTask(DataStore& dataStore, std::shared_ptr<CANInterface> canInterface)
     : SimObject(dataStore, "PrintTask", 1),  // 1Hz
-      m_can(canInterface)
+      m_can(canInterface),
+      m_clearOnPeriodicPrint(false)
 {
     std::cout << "[PrintTask] Initializing" << std::endl;
 
@@ -36,6 +37,11 @@ void PrintTask::step(unsigned long dt)
     double hz = 1/delay;
 
     // Print output
+    if (m_clearOnPeriodicPrint) {
+        // write(1,"\E[H\E[2J",7);
+        cout << "\E[H\E[2J";
+        cout.flush();
+    }
     cout << "[" << getName() << "] status output - " << delay << "s (" << hz << "Hz)\t" << endl;;
     cout << "\tcounter\t" << counter << endl;
     cout << "\tReceived CAN messages:" << endl;
@@ -85,4 +91,9 @@ void PrintTask::canCallback(void* obj, uint32_t msgId, uint8_t data[8], size_t l
 
     PrintTask* printTask = (PrintTask*)obj;
     printTask->m_receivedMsgs.push_back(frame);
+}
+
+void PrintTask::setClearOnPeriodicPrint(const bool clear)
+{
+    m_clearOnPeriodicPrint = clear;
 }

@@ -30,12 +30,17 @@ private:
      */
     std::vector<CANFrame> m_receivedMsgs;
 
+    bool m_clearOnPeriodicPrint;
+
 public:
     PrintTask(DataStore& dataStore, std::shared_ptr<CANInterface> canInterface);
 
     virtual void init();
 
     virtual void step(unsigned long dt);
+
+    // Sets whether to clear the console before each 1s print
+    void setClearOnPeriodicPrint(const bool clear);
 };
 
 #endif
