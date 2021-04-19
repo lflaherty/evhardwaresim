@@ -15,7 +15,7 @@ private:
     static void canCallback(void* obj, uint32_t msgId, uint8_t* data, size_t);
 
     /**
-     * Used to access DAC
+     * CAN bus access
      */
     std::shared_ptr<CANInterface> m_can;
 

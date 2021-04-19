@@ -22,8 +22,13 @@ void PrintTask::init()
 {
     std::cout << "[" << getName() << "] init" << std::endl;
 
-    unsigned long counter = 0;
-    getDataStore().put("counter", counter);
+    unsigned long tick_counter = 0;
+    getDataStore().put("tick_counter", tick_counter);
+    getDataStore().put("adc0", (uint16_t)0);
+    getDataStore().put("adc1", (uint16_t)0);
+    getDataStore().put("adc2", (uint16_t)0);
+    getDataStore().put("adc3", (uint16_t)0);
+    getDataStore().put("adc4", (uint16_t)0);
 }
 
 void PrintTask::step(unsigned long dt)
@@ -31,7 +36,7 @@ void PrintTask::step(unsigned long dt)
     using namespace std;
 
     DataStore& ds = getDataStore();
-    unsigned long counter = ds.get<unsigned long>("counter");
+    unsigned long tick_counter = ds.get<unsigned long>("tick_counter");
 
     double delay = 1e-9*dt;
     double hz = 1/delay;
@@ -42,8 +47,16 @@ void PrintTask::step(unsigned long dt)
         cout << "\E[H\E[2J";
         cout.flush();
     }
-    cout << "[" << getName() << "] status output - " << delay << "s (" << hz << "Hz)\t" << endl;;
-    cout << "\tcounter\t" << counter << endl;
+    cout << "[" << getName() << "] status output - " << delay << "s (" << hz << "Hz)\t" << endl;
+
+    cout << "\tVariables:" << endl;
+    cout << "\t\ttick_counter\t" << tick_counter << endl;
+    cout << "\t\tadc0\t" << ds.get<uint16_t>("adc0") << endl;
+    cout << "\t\tadc1\t" << ds.get<uint16_t>("adc1") << endl;
+    cout << "\t\tadc2\t" << ds.get<uint16_t>("adc2") << endl;
+    cout << "\t\tadc3\t" << ds.get<uint16_t>("adc3") << endl;
+    cout << "\t\tadc4\t" << ds.get<uint16_t>("adc4") << endl;
+
     cout << "\tReceived CAN messages:" << endl;
 
     std::vector<CANFrame>::iterator it;
@@ -68,17 +81,8 @@ void PrintTask::step(unsigned long dt)
 
     m_receivedMsgs.clear();
 
-
-    counter = 0;
-    ds.put("counter", counter);
-
-    // also send count on CAN bus
-    uint8_t canData[8] = {0};
-    canData[0] = (counter >> 24) & 0xFF;
-    canData[1] = (counter >> 16) & 0xFF;
-    canData[2] = (counter >> 8) & 0xFF;
-    canData[3] = (counter) & 0xFF;
-    m_can->send(0x3A1, 8, canData);
+    // reset the tick counter
+    ds.put("tick_counter", (unsigned long)0);
 }
 
 void PrintTask::canCallback(void* obj, uint32_t msgId, uint8_t data[8], size_t len)
