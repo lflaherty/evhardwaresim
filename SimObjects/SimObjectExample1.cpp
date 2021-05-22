@@ -69,6 +69,11 @@ void SimObjectExample1::init()
     getDataStore().put("adc2", (uint16_t)0);
     getDataStore().put("adc3", (uint16_t)0);
     getDataStore().put("adc4", (uint16_t)0);
+
+    getDataStore().put("dac0", (uint16_t)0);
+    getDataStore().put("dac1", (uint16_t)0);
+    getDataStore().put("dac2", (uint16_t)0);
+    getDataStore().put("dac3", (uint16_t)0);
 }
 
 void SimObjectExample1::step(unsigned long)
@@ -96,10 +101,16 @@ void SimObjectExample1::step(unsigned long)
     // uint16_t dacOutput = tick_counter % 1024;
 
     // DAC outputs are from 0-1023
-    uint16_t dacOutput0 = 0;
+    uint16_t dacOutput0 = 512;
     uint16_t dacOutput1 = 0;
     uint16_t dacOutput2 = 0;
-    uint16_t dacOutput3 = m_counter_seconds * 4;  // out output DACs are 10 bits, but the STM32 DACs are 12bit
+    uint16_t dacOutput3 = (m_counter_seconds * 4) % 1023;  // out output DACs are 10 bits, but the STM32 DACs are 12bit
+    
+    // Update data storage so PrintTask can output
+    getDataStore().put("dac0", dacOutput0);
+    getDataStore().put("dac1", dacOutput1);
+    getDataStore().put("dac2", dacOutput2);
+    getDataStore().put("dac3", dacOutput3);
 
     m_mcp4912->write(dacOutput0, ChannelA, MCP4912::BUFFERED, MCP4912::GAIN_1, MCP4912::ACTIVE);
     m_mcp4912->write(dacOutput1, ChannelB, MCP4912::BUFFERED, MCP4912::GAIN_1, MCP4912::ACTIVE);

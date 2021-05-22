@@ -29,6 +29,11 @@ void PrintTask::init()
     getDataStore().put("adc2", (uint16_t)0);
     getDataStore().put("adc3", (uint16_t)0);
     getDataStore().put("adc4", (uint16_t)0);
+
+    getDataStore().put("dac0", (uint16_t)0);
+    getDataStore().put("dac1", (uint16_t)0);
+    getDataStore().put("dac2", (uint16_t)0);
+    getDataStore().put("dac3", (uint16_t)0);
 }
 
 void PrintTask::step(unsigned long dt)
@@ -56,6 +61,10 @@ void PrintTask::step(unsigned long dt)
     cout << "\t\tadc2\t" << ds.get<uint16_t>("adc2") << endl;
     cout << "\t\tadc3\t" << ds.get<uint16_t>("adc3") << endl;
     cout << "\t\tadc4\t" << ds.get<uint16_t>("adc4") << endl;
+    cout << "\t\tdac0\t" << ds.get<uint16_t>("dac0") << endl;
+    cout << "\t\tdac1\t" << ds.get<uint16_t>("dac1") << endl;
+    cout << "\t\tdac2\t" << ds.get<uint16_t>("dac2") << endl;
+    cout << "\t\tdac3\t" << ds.get<uint16_t>("dac3") << endl;
 
     cout << "\tReceived CAN messages:" << endl;
 
