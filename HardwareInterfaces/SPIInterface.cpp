@@ -111,7 +111,6 @@ void SPIInterface::transfer(
         .cs_change = 0,
         .tx_nbits = 0,
         .rx_nbits = 0,
-        .word_delay_usecs = 0,
         .pad = 0
     };
 
