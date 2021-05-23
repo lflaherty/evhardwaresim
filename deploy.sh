@@ -3,7 +3,7 @@
 # Build and deploy to BeagleBone debug device
 
 echo "BUILDING"
-make
+make -j`nproc`
 
 echo "DEPLOYING TO DEVICE"
 UNAME=debian
