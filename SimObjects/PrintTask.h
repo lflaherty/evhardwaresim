@@ -6,6 +6,8 @@
 
 #include "CANInterface.h"
 
+#include <iostream>
+#include <iomanip>
 #include <memory>
 #include <vector>
 
@@ -32,6 +34,12 @@ private:
 
     bool m_clearOnPeriodicPrint;
 
+    template <typename T>
+    void printVariable(std::string name, T value);
+
+    template <typename T>
+    void printVariableRatio(std::string name, T value, T maxValue);
+
 public:
     PrintTask(DataStore& dataStore, std::shared_ptr<CANInterface> canInterface);
 
@@ -42,5 +50,20 @@ public:
     // Sets whether to clear the console before each 1s print
     void setClearOnPeriodicPrint(const bool clear);
 };
+
+template <typename T>
+void PrintTask::printVariable(std::string name, T value)
+{
+    std::cout << "\t\t" << name << "\t" << value << std::endl;
+}
+
+template <typename T>
+void PrintTask::printVariableRatio(std::string name, T value, T maxValue)
+{
+    float ratio = 100.0f * static_cast<float>(value)/static_cast<float>(maxValue);
+
+    std::cout << "\t\t" << name << "\t" << value;
+    std::cout << "\t" << std::fixed << std::setprecision(2) << ratio << "%" << std::endl;
+}
 
 #endif

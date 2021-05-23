@@ -55,16 +55,16 @@ void PrintTask::step(unsigned long dt)
     cout << "[" << getName() << "] status output - " << delay << "s (" << hz << "Hz)\t" << endl;
 
     cout << "\tVariables:" << endl;
-    cout << "\t\ttick_counter\t" << tick_counter << endl;
-    cout << "\t\tadc0\t" << ds.get<uint16_t>("adc0") << endl;
-    cout << "\t\tadc1\t" << ds.get<uint16_t>("adc1") << endl;
-    cout << "\t\tadc2\t" << ds.get<uint16_t>("adc2") << endl;
-    cout << "\t\tadc3\t" << ds.get<uint16_t>("adc3") << endl;
-    cout << "\t\tadc4\t" << ds.get<uint16_t>("adc4") << endl;
-    cout << "\t\tdac0\t" << ds.get<uint16_t>("dac0") << endl;
-    cout << "\t\tdac1\t" << ds.get<uint16_t>("dac1") << endl;
-    cout << "\t\tdac2\t" << ds.get<uint16_t>("dac2") << endl;
-    cout << "\t\tdac3\t" << ds.get<uint16_t>("dac3") << endl;
+    printVariable<unsigned long>("tick_counter", tick_counter);
+    printVariableRatio<uint16_t>("adc0", ds.get<uint16_t>("adc0"), 4095);
+    printVariableRatio<uint16_t>("adc1", ds.get<uint16_t>("adc1"), 4095);
+    printVariableRatio<uint16_t>("adc2", ds.get<uint16_t>("adc2"), 4095);
+    printVariableRatio<uint16_t>("adc3", ds.get<uint16_t>("adc3"), 4095);
+    printVariableRatio<uint16_t>("adc4", ds.get<uint16_t>("adc4"), 4095);
+    printVariableRatio<uint16_t>("dac0", ds.get<uint16_t>("dac0"), 1023);
+    printVariableRatio<uint16_t>("dac1", ds.get<uint16_t>("dac1"), 1023);
+    printVariableRatio<uint16_t>("dac2", ds.get<uint16_t>("dac2"), 1023);
+    printVariableRatio<uint16_t>("dac3", ds.get<uint16_t>("dac3"), 1023);
 
     cout << "\tReceived CAN messages:" << endl;
 
