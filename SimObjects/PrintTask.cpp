@@ -5,15 +5,20 @@
 #include <any>
 #include <cstring>
 
-PrintTask::PrintTask(DataStore& dataStore, std::shared_ptr<CANInterface> canInterface)
+PrintTask::PrintTask(
+    DataStore& dataStore, 
+    std::shared_ptr<CANInterface> canInterface,
+    std::shared_ptr<UARTInterface> uartInterface)
     : SimObject(dataStore, "PrintTask", 1),  // 1Hz
       m_can(canInterface),
+      m_uart(uartInterface),
       m_clearOnPeriodicPrint(false)
 {
     std::cout << "[PrintTask] Initializing" << std::endl;
 
     // Register a callback
     canInterface->addCallback(canCallback, (void*)this);
+    uartInterface->addCallback(uartCallback, (void*)this);
 
     std::cout << "[PrintTask] Initialized" << std::endl;
 }
@@ -67,28 +72,35 @@ void PrintTask::step(unsigned long dt)
     printVariableRatio<uint16_t>("dac3", ds.get<uint16_t>("dac3"), 1023);
 
     cout << "\tReceived CAN messages:" << endl;
-
-    std::vector<CANFrame>::iterator it;
-    for (it = m_receivedMsgs.begin(); it != m_receivedMsgs.end(); ++it) {
+    std::vector<CANFrame>::iterator itCan;
+    for (itCan = m_receivedMsgs.begin(); itCan != m_receivedMsgs.end(); ++itCan) {
         cout << "\t\t";
         cout << hex << uppercase;
-        cout << it->msgId << "\t";
+        cout << itCan->msgId << "\t";
 
         cout << dec;
-        cout << "[" << it->len << "]" << " ";
+        cout << "[" << itCan->len << "]" << " ";
 
         cout << hex << uppercase;
-        for (size_t i = 0; i < it->len; ++i) {
+        for (size_t i = 0; i < itCan->len; ++i) {
             cout << " ";
-            cout << setfill('0') << setw(2) << (unsigned int)it->data[i];
+            cout << setfill('0') << setw(2) << (unsigned int)itCan->data[i];
         }
 
         cout << endl;
     }
     cout << dec;
     cout << endl;
-
     m_receivedMsgs.clear();
+
+    cout << "\tReceived UART bytes:" << endl;
+    cout << "\t\t";
+    std::vector<uint8_t>::iterator itUart;
+    for (itUart = m_receivedUart.begin(); itUart != m_receivedUart.end(); ++itUart) {
+        cout << *itUart;
+    }
+    cout << endl;
+
 
     // reset the tick counter
     ds.put("tick_counter", (unsigned long)0);
@@ -102,8 +114,14 @@ void PrintTask::canCallback(void* obj, uint32_t msgId, uint8_t data[8], size_t l
 
     std::memcpy(frame.data, data, len);
 
-    PrintTask* printTask = (PrintTask*)obj;
-    printTask->m_receivedMsgs.push_back(frame);
+    PrintTask* printTask = static_cast<PrintTask*>(obj);
+}
+
+void PrintTask::uartCallback(void* obj, uint8_t data)
+{
+    PrintTask* printTask = static_cast<PrintTask*>(obj);
+
+    printTask->m_receivedUart.push_back(data);
 }
 
 void PrintTask::setClearOnPeriodicPrint(const bool clear)

@@ -10,6 +10,7 @@
 #include "CANInterface.h"
 #include "GPIOInterface.h"
 #include "SPIInterface.h"
+#include "UARTInterface.h"
 
 #include "MCP4912.h"
 
@@ -28,6 +29,7 @@ void declareSimObjects(
     // Create all of the sim objects here and append to the simObjects vector
     // Hardware Interfaces
     shared_ptr<CANInterface> canInterface(new CANInterface(dataStore));
+    shared_ptr<UARTInterface> uartInterface(new UARTInterface(dataStore));
     shared_ptr<GPIOInterface> gpioInterface(new GPIOInterface(dataStore));
 
     SPIInterface::SPIConfig spiConfig;
@@ -42,11 +44,12 @@ void declareSimObjects(
 
     // Sim Objects
     shared_ptr<SimObjectExample1> example(new SimObjectExample1(dataStore, mcp4912, canInterface));
-    shared_ptr<PrintTask> printTask(new PrintTask(dataStore, canInterface));
+    shared_ptr<PrintTask> printTask(new PrintTask(dataStore, canInterface, uartInterface));
     printTask->setClearOnPeriodicPrint(g_clearOnPeriodicPrint);
 
     simObjects.push_back(example);
     simObjects.push_back(canInterface);
+    simObjects.push_back(uartInterface);
     simObjects.push_back(gpioInterface);
     simObjects.push_back(spiInterface);
     simObjects.push_back(mcp4912);

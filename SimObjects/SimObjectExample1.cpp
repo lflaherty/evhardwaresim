@@ -121,7 +121,7 @@ void SimObjectExample1::step(unsigned long)
 
 void SimObjectExample1::canCallback(void* obj, uint32_t msgId, uint8_t data[8], size_t len)
 {
-    SimObjectExample1* simObj = (SimObjectExample1*)obj;
+    SimObjectExample1* simObj = static_cast<SimObjectExample1*>(obj);
 
     switch (msgId) {
         case 0x100: {
