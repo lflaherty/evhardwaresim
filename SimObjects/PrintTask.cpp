@@ -115,6 +115,7 @@ void PrintTask::canCallback(void* obj, uint32_t msgId, uint8_t data[8], size_t l
     std::memcpy(frame.data, data, len);
 
     PrintTask* printTask = static_cast<PrintTask*>(obj);
+    printTask->m_receivedMsgs.push_back(frame);
 }
 
 void PrintTask::uartCallback(void* obj, uint8_t data)
