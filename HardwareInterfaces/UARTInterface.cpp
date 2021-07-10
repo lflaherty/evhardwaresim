@@ -16,7 +16,6 @@ UARTInterface::UARTInterface(DataStore& dataStore)
       m_errorPrinted(false)
 {
 	// Set up UART driver
-    // TODO
     char ttyFile[] = "/dev/ttyS4";
 
     m_fd = open(ttyFile, O_RDWR | O_NOCTTY);
@@ -41,6 +40,18 @@ UARTInterface::UARTInterface(DataStore& dataStore)
     // clean line and set attributes
     tcflush(m_fd, TCIFLUSH);
     tcsetattr(m_fd, TCSANOW, &m_uartTermios);
+	
+	// Set up UART socket threads
+    struct sched_param param;
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+    pthread_attr_setschedpolicy(&attr, SCHED_RR);
+    param.sched_priority = 1;
+    pthread_attr_setschedparam(&attr, &param);
+	pthread_t threadTask_id;
+    pthread_create(&threadTask_id, &attr, UARTThread, this);
+
+    std::cout << "[" << getName() << "] device setup complete" << std::endl;
 }
 
 void UARTInterface::init()
@@ -89,7 +100,7 @@ void* UARTInterface::UARTThread(void* uartInterface)
                 std::cout << "[" << uart->getName() << "] Error reading UART byte";
                 printedError = true;
             }
-        } else {
+        } else if (recvbytes > 0) {
             // Received data
 
             // Get the appropriate callbacks
