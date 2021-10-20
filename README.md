@@ -9,6 +9,5 @@ With the custom expansion board hardware and this software, the BBB platform can
 # Pre-requisities #
 
 * This project is intended to be run on ARM based Linux hardware, so the cross-compiler is needed: `sudo apt install g++-arm-linux-gnueabihf`
-* The device tree overlay in `beaglebone_scripts/` must be compiled and loaded onto the device
-* `/boot/uEnv.txt` must be updated to load the correct I/O setup (i.e. CAN bus, serial, SPI, and the appropriate GPIOs). (See `beaglebone_scripts/uEnv.txt` for reference.)
+* View `beaglebone_scripts/README.md` for device setup instructions.
 
