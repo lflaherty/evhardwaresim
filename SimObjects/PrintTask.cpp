@@ -100,6 +100,7 @@ void PrintTask::step(unsigned long dt)
         cout << *itUart;
     }
     cout << endl;
+    m_receivedUart.clear();
 
 
     // reset the tick counter

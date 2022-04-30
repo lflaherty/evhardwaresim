@@ -86,14 +86,14 @@ void SimObjectExample1::step(unsigned long)
     ds.put("tick_counter", tick_counter);
     
     // also send count on CAN bus
-    if (tick_counter == 1) {
-        uint8_t canData[8] = {0};
-        canData[0] = (tick_counter >> 24) & 0xFF;
-        canData[1] = (tick_counter >> 16) & 0xFF;
-        canData[2] = (tick_counter >> 8) & 0xFF;
-        canData[3] = (tick_counter) & 0xFF;
-        m_can->send(0x3A1, 8, canData);
+    uint8_t canData[8] = {0};
+    canData[0] = (tick_counter >> 24) & 0xFF;
+    canData[1] = (tick_counter >> 16) & 0xFF;
+    canData[2] = (tick_counter >> 8) & 0xFF;
+    canData[3] = (tick_counter) & 0xFF;
+    m_can->send(0x3A1, 8, canData);
 
+    if (tick_counter == 1) {
         m_counter_seconds++;
     }
 
